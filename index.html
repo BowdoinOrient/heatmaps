@@ -8,14 +8,18 @@
 
     <!-- Everything from here down will be the HTMLattachment -->
     <style>
-        .cbx-label{display:inline-block; padding-left:10px;}
+        .attachment-wrapper {width:890px; height:600px; display:block; position:relative;}
+        .heatmap-anchor {width:75%; height:100%;position:absolute; left:0; z-index:99;}
+        .controls {width:24%; height:99.5%; position:absolute; right:0; padding:0 10px; border: 1px solid grey; border-radius:8px;}
+        .cbx-label {display:inline-block; padding-left:10px;}
         .controls label {padding-left:10px; cursor:hand;}
         label p {margin:5px 0; max-width:80%;}
         label input {cursor:hand;}
+        button {margin:15px 15px; width:70px; height:25px; cursor:hand;}
     </style>
-    <div class="attachment-wrapper" style="width:890px; height:600px; display:block;">
-        <div class="heatmap-anchor" style="width:75%; height:100%; float:left;"></div>
-        <div class="controls" style="width:25%; height:100%; float:right;">
+    <div class="attachment-wrapper">
+        <div class="heatmap-anchor"></div>
+        <div class="controls">
             <label><input type="checkbox" id="alcohol-related-transport"><p class="cbx-label">Alcohol-Related Transport</p></label></br>
             <label><input type="checkbox" id="bike-theft"><p class="cbx-label">Bike Theft</p></label></br>
             <label><input type="checkbox" id="car-related-incident"><p class="cbx-label">Car-Related Incident</p></label></br>
@@ -34,6 +38,8 @@
             <label><input type="checkbox" id="vandalism"><p class="cbx-label">Vandalism</p></label></br>
             <label><input type="checkbox" id="wall-damage"><p class="cbx-label">Wall Damage</p></label></br>
             <label><input type="checkbox" id="wellness-check"><p class="cbx-label">Wellness Check</p></label></br>
+            <button type="button" id="check-all">All</button>
+            <button type="button" id="clear-all">None</button>
         </div>
     </div>
     <script src="http://maps.google.com/maps/api/js?key=AIzaSyD3ekwXld1OcEG3-Q09yA3kV6nZj3KNFUE&sensor=false"></script>
@@ -86,7 +92,7 @@
 
             var dataset = {
                 max: 1.75,
-                data: alldata
+                data: selectdata
             };
 
             // now we can set the data
@@ -96,6 +102,24 @@
             });
 
         };
+
+        $("#check-all").click(function(){
+            $("input:checkbox").each(function(){
+                $(this).prop('checked', true);
+            });
+            selectdata = alldata;
+            dataset = {max:1.75, data:selectdata};
+            heatmap.setDataSet(dataset);
+        });
+
+        $("#clear-all").click(function(){
+            $("input:checkbox").each(function(){
+                $(this).prop('checked', false);
+            });
+            selectdata = [];
+            dataset = {max:1.75, data:selectdata};
+            heatmap.setDataSet(dataset);
+        });
     </script>
 </body>
 </html>
